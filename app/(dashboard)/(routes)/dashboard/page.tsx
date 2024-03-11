@@ -10,7 +10,7 @@ export default function DashboardPage() {
     const tools = [{
         label: "Conversation",
         icon:MessageSquare,
-        href:"/conversation",
+        href:"/cases",
         color:"text-violet-500",
         bgColor:"bg-violet-500/10"
     },

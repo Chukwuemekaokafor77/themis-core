@@ -4,11 +4,12 @@ import * as z from "zod";
 import axios from "axios";
 import { MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ChatCompletionRequestMessage } from "openai";
-
+import { formSchema } from "./constants";
+import { useGenerationStore } from '@/app/store/contextParam';
 // import { BotAvatar } from "@/components/bot-avatar";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
@@ -16,17 +17,36 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 // import { Loader } from "@/components/loader";
 // import { UserAvatar } from "@/components/user-avatar";
 // import { Empty } from "@/components/ui/empty";
 // import { useProModal } from "@/hooks/use-pro-modal";
+import { Configuration, OpenAIApi } from "openai";
 
-import { formSchema } from "./constants";
+// import { checkSubscription } from "@/lib/subscription";
+// import { incrementApiLimit, checkApiLimit } from "@/lib/api-limit";
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+
+    
+const openai = new OpenAIApi(configuration);
+
+
 
 const ConversationPage = () => {
+    const searchParams = useSearchParams();
+   const {summarisedText} = useGenerationStore();
+  console.log(searchParams.get("text"));
+  //const baseSummary = searchParams.get("text");
   const router = useRouter();
 //   const proModal = useProModal();
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([
+    { role: "system", content: "use this summary as a base for further chat"+ summarisedText },
+  ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,8 +55,11 @@ const ConversationPage = () => {
     }
   });
 
-  const isLoading = form.formState.isSubmitting;
   
+  const isLoading = form.formState.isSubmitting;
+
+   
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
@@ -92,7 +115,7 @@ const ConversationPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading} 
-                        placeholder="How do I calculate the radius of a circle?" 
+                        placeholder="Ask further questions?" 
                         {...field}
                       />
                     </FormControl>
@@ -116,7 +139,7 @@ const ConversationPage = () => {
             // <Empty label="No conversation started." />
           )}
           <div className="flex flex-col-reverse gap-y-4">
-            {messages.map((message) => (
+            {messages.length>1 && messages.slice(1).map((message) => (
               <div 
                 key={message.content} 
                 className={cn(
