@@ -29,7 +29,7 @@ interface FormData {
     court: string;
 }
 const Page = () => {
-    const years: number[] = Array.from({ length: 10 }, (_, index) => new Date().getFullYear() - index);
+    const years: number[] = Array.from({ length: 20 }, (_, index) => new Date().getFullYear() - index);
     const router = useRouter();
     const [keywords, setKeywords] = useState<string>('');
     const [category1, setCategory1] = useState<string>('');
@@ -53,12 +53,14 @@ const Page = () => {
             court: category2
         };
         // Assuming you're using fetch API to send data
-        fetch('http://localhost:8080/api/get_data', {
+        fetch('http://127.0.0.1:8080/api/get_data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
+            
+            
         })
             .then(response => {
                 if (!response.ok) {
@@ -114,8 +116,8 @@ const Page = () => {
                         onChange={(e) => setCategory2(e.target.value)}
                     >
                         <option value="">ALL</option>
-                        <option value="Category 2 Option 1">SC</option>
-                        <option value="Category 2 Option 2">FC</option>
+                        <option value="SC">SC</option>
+                        <option value="FC">FC</option>
                         {/* Add more options as needed */}
                     </select>
                 </div>

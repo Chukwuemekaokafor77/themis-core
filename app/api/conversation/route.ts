@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs";
+import { log } from "console";
 import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
 
@@ -15,11 +16,17 @@ export async function POST(
   req: Request
 ) {
   try {
+    console.log("inside");
+    
     const { userId } = auth();
     const body = await req.json();
     const { messages  } = body;
-
+    log("messages",messages);
+    console.log("userId",userId);
+    
     if (!userId) {
+      console.log("not auth",userId);
+      
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -37,7 +44,8 @@ export async function POST(
     // if (!freeTrial && !isPro) {
     //   return new NextResponse("Free trial has expired. Please upgrade to pro.", { status: 403 });
     // }
-
+    console.log("chatting");
+    
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages
@@ -46,7 +54,8 @@ export async function POST(
     // if (!isPro) {
     //   await incrementApiLimit();
     // }
-
+    console.log(response);
+    
     return NextResponse.json(response.data.choices[0].message);
   } catch (error) {
     console.log('[CONVERSATION_ERROR]', error);
