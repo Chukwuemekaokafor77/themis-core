@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function DashboardPage() {
     const router = useRouter();
     const tools = [{
-        label: "Conversation",
+        label: "Case research and conversation",
         icon:MessageSquare,
         href:"/cases",
         color:"text-violet-500",
@@ -17,28 +17,28 @@ export default function DashboardPage() {
     {
         label: "Document Generation",
         icon:File,
-        href:"/document",
+        href:"/cases",
         color:"text-pink-700",
         bgColor:"bg-pink-700/10"
     },
     {
         label: "Summary Generator",
         icon:Scroll,
-        href:"/summary",
+        href:"/cases",
         color:"text-orange-700",
         bgColor:"bg-orange-700/10"
     },
     {
         label: "Confidence Score",
         icon:BadgePercent,
-        href:"/confidence",
+        href:"/cases",
         color:"text-emerald-500",
         bgColor:"bg-emerald-500/10"
     },
     {
         label: "Argument Generation",
         icon:BotMessageSquare,
-        href:"/argument",
+        href:"/cases",
         color:"text-green-700",
         bgColor:"bg-green-700/10"
     },

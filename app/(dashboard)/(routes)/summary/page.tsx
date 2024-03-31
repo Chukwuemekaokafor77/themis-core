@@ -13,7 +13,7 @@ const {
     HarmBlockThreshold,
 } = require("@google/generative-ai")
 const MODEL_NAME = "gemini-1.0-pro";
-const API_KEY = "AIzaSyBKNeqrMbcodQzWVsmHr1AQs_PqOvFgSlU";
+const API_KEY = "AIzaSyAzoAdIkPeaQg_PVvsnXgCjp4-x_Lnxo-E";
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
@@ -43,34 +43,28 @@ const safetySettings = [
     },
 ];
 
-const summary = async (part: string, keywordsForCase: string) => {
-    if (part === "") {
-        throw new Error("Empty case please retry");
-    }
-    const parts = [{ text: `Summarise following legal case in 3000 words include sections used , date , time ,city using the following keywords : ${part} keywords: ${keywordsForCase}` }];
-    const result = await model.generateContent({
 
-        contents: [{ role: "user", parts }],
-        generationConfig,
-        safetySettings
-    });
-
-    const response = await result.response;
-    return response.text();
-}
 
 const SummaryPage = () => {
     const router = useRouter();
     const createQueryString = (value: string) => {
         router.push("/conversation")
     };
+    const createQueryStringGrpah = (value: string) => {
+        router.push("/directed")
+    };
     const searchParams = useSearchParams();
-    console.log(searchParams.get("text"));
+    // console.log(searchParams.get("text"));
     const { textField, summarisedText, keywordsForCase } = useGenerationStore();
     const { setSummarisedText } = useGenerationStore();
     //const [summarisedText, setSummarisedText] = useState("");
     const [textToSummarise, setTextToSummarise] = useState(textField ?? "");
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedTemplate, setSelectedTemplate] = useState('Summarise following legal case in 3000 words include sections used , date , time ,city using');
+    const handleTemplateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedTemplate(event.target.value);
+        setIsLoading(true);
+    };
     useEffect(() => {
 
         setIsLoading(true);
@@ -80,15 +74,55 @@ const SummaryPage = () => {
 
         });
     }, []);
+    useEffect(() => {
+        setIsLoading(true);
+        summary(textToSummarise, keywordsForCase).then((result) => {
+            setSummarisedText(result);
+            setIsLoading(false);
+        });
+    }, [selectedTemplate]);
+    const summary = async (part: string, keywordsForCase: string) => {
+        if (part === "") {
+            throw new Error("Empty case please retry");
+        }
+        const parts = [{ text: `${selectedTemplate} the following keywords : ${part} keywords: ${keywordsForCase}` }];
+        const result = await model.generateContent({
+    
+            contents: [{ role: "user", parts }],
+            generationConfig,
+            safetySettings
+        });
+    
+        try {
+            const response = await result.response;
+            // rest of your code
+            return response.text();
+          } catch (error) {
+            console.error('An error occurred:', error);
+          }
+       
+    }
     return (
         <div className='flex flex-col justify-center '>
             <div className=' bg-white rounded px-8 pt-6 pb-8 mb-4'>
                 <h1 className='text-center text-xl'>Summary</h1>
-                {isLoading && summarisedText==="" && <div className='text-center p-50'>Loading...</div>}
+                <h2>Selcte template for summarization</h2>
+                <select value={selectedTemplate} onChange={handleTemplateChange}>
+                <option value="Summarise following legal case in 3000 words include sections used , date , time ,city using" title="This is the default template showing ciratain , year , city and ruling">Default</option>
+                <option value="Summarise following legal case in 1000 words include sections used , date , time ,city using" title="This is short verison of summary in 1000 words">Short</option>
+                <option value="Summarise following legal case in 3000 words include sections used or find related princilpe that could have been used" title="This is the principle first template which shows relevant principles">Principle</option>
+            </select>
+                {isLoading && <div className='text-center p-50'>Loading...</div>}
+                <div className='flex justify-end'>
+                {!isLoading && summarisedText !== "" && <Button  className="mr-2" onClick={() => createQueryString(summarisedText)}>Open in Interactive mode</Button>}
+         
+                {!isLoading && summarisedText !== "" && <Button  onClick={() => createQueryStringGrpah(summarisedText)}>Show directed graph</Button>}
+                </div>
+                {!isLoading && 
                 <div>
                     <CaseStyle text={summarisedText}></CaseStyle>
                 </div>
-                {!isLoading && summarisedText !== "" && <Button onClick={() => createQueryString(summarisedText)}>Open in Interactive mode</Button>}
+                }
             </div>
         </div>
     );
