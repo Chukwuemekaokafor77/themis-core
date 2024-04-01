@@ -7,6 +7,8 @@ import { set } from "zod";
 import { useGenerationStore } from '@/app/store/contextParam';
 import { Button } from "@/components/ui/button";
 import CaseStyle from '@/lib/textStyling';
+import Modal from 'react-modal';
+
 const {
     GoogleGenerativeAI,
     HarmCategory,
@@ -46,12 +48,23 @@ const safetySettings = [
 
 
 const SummaryPage = () => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    // setModalIsOpen(true);
+    window.open("/principles", '_blank');
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
     const router = useRouter();
     const createQueryString = (value: string) => {
         router.push("/conversation")
     };
     const createQueryStringGrpah = (value: string) => {
-        router.push("/directed")
+        // router.push("/directed")
+        window.open("/directed", '_blank');
     };
     const searchParams = useSearchParams();
     // console.log(searchParams.get("text"));
@@ -116,7 +129,8 @@ const SummaryPage = () => {
                 <div className='flex justify-end'>
                 {!isLoading && summarisedText !== "" && <Button  className="mr-2" onClick={() => createQueryString(summarisedText)}>Open in Interactive mode</Button>}
          
-                {!isLoading && summarisedText !== "" && <Button  onClick={() => createQueryStringGrpah(summarisedText)}>Show directed graph</Button>}
+                {!isLoading && summarisedText !== "" && <Button  className="mr-2"  onClick={() => createQueryStringGrpah(summarisedText)}>Show directed graph</Button>}
+                {!isLoading && summarisedText !== "" && <Button  onClick={() => openModal()}>Principles</Button>}
                 </div>
                 {!isLoading && 
                 <div>
@@ -124,6 +138,19 @@ const SummaryPage = () => {
                 </div>
                 }
             </div>
+            {/* <div>
+     
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+       className='flex flex-col justify-center '
+      >
+        <h2>Law Principles</h2>
+        <button onClick={closeModal}>close</button>
+        <p>cfygwab fwvuiaskjb gbwgvbdsanf</p>
+      </Modal>
+    </div> */}
         </div>
     );
 }

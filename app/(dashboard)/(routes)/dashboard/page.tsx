@@ -17,28 +17,28 @@ export default function DashboardPage() {
     {
         label: "Document Generation",
         icon:File,
-        href:"/cases",
+        href:"/dum1",
         color:"text-pink-700",
         bgColor:"bg-pink-700/10"
     },
     {
         label: "Summary Generator",
         icon:Scroll,
-        href:"/cases",
+        href:"/dum2",
         color:"text-orange-700",
         bgColor:"bg-orange-700/10"
     },
     {
         label: "Confidence Score",
         icon:BadgePercent,
-        href:"/cases",
+        href:"/dum3",
         color:"text-emerald-500",
         bgColor:"bg-emerald-500/10"
     },
     {
         label: "Argument Generation",
         icon:BotMessageSquare,
-        href:"/cases",
+        href:"/dum4",
         color:"text-green-700",
         bgColor:"bg-green-700/10"
     },

@@ -21,31 +21,31 @@ const routes = [{
 {
     label: "Document Generation",
     icon:File,
-    href:"/cases",
+    href:"/doc",
     color:"text-pink-700"
 },
 {
     label: "Summary Generator",
     icon:Scroll,
-    href:"/cases",
+    href:"/summary",
     color:"text-orange-700"
 },
 {
     label: "Confidence Score",
     icon:BadgePercent,
-    href:"/cases",
+    href:"/condfidence",
     color:"text-emerald-500"
 },
 {
     label: "Argument Generation",
     icon:BotMessageSquare,
-    href:"/cases",
+    href:"/argument",
     color:"text-green-700"
 },
 {
     label: "Settings",
     icon:Settings,
-    href:"/cases",
+    href:"/settings",
     
 }
 ];

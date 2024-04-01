@@ -40,7 +40,7 @@ const openai = new OpenAIApi(configuration);
 const ConversationPage = () => {
     const searchParams = useSearchParams();
    const {summarisedText} = useGenerationStore();
-  console.log(searchParams.get("text"));
+  // console.log(searchParams.get("text"));
   //const baseSummary = searchParams.get("text");
   const router = useRouter();
 //   const proModal = useProModal();
