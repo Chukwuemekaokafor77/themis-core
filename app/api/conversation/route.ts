@@ -16,16 +16,16 @@ export async function POST(
   req: Request
 ) {
   try {
-    console.log("inside");
+    // console.log("inside");
     
     const { userId } = auth();
     const body = await req.json();
     const { messages  } = body;
-    log("messages",messages);
-    console.log("userId",userId);
+    // log("messages",messages);
+    // console.log("userId",userId);
     
     if (!userId) {
-      console.log("not auth",userId);
+      // console.log("not auth",userId);
       
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -44,7 +44,7 @@ export async function POST(
     // if (!freeTrial && !isPro) {
     //   return new NextResponse("Free trial has expired. Please upgrade to pro.", { status: 403 });
     // }
-    console.log("chatting");
+    // console.log("chatting");
     
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
@@ -54,7 +54,7 @@ export async function POST(
     // if (!isPro) {
     //   await incrementApiLimit();
     // }
-    console.log(response);
+    // console.log(response);
     
     return NextResponse.json(response.data.choices[0].message);
   } catch (error) {

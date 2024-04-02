@@ -47,7 +47,14 @@ const ConversationPage = () => {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([
     { role: "system", content: "use this summary as a base for further chat"+ summarisedText },
   ]);
-
+  const createQueryStringGrpah = (value: string) => {
+    // router.push("/directed")
+    window.open("/directed", '_blank');
+};
+const openModal = () => {
+  // setModalIsOpen(true);
+  window.open("/principles", '_blank');
+};
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,13 +89,19 @@ const ConversationPage = () => {
 
   return ( 
     <div>
-      <Heading
-        title="Conversation"
-        description="Our AI conversation model."
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
-      />
+      <div className='flex justify-between items-center bg-white rounded px-4 pt-2 pb-4 mb-2'>
+  <Heading
+    title="Conversation"
+    description="Our AI conversation model."
+    icon={MessageSquare}
+    iconColor="text-violet-500"
+    bgColor="bg-violet-500/10"
+  />
+  <div>
+    <Button className="mr-2" onClick={() => createQueryStringGrpah(summarisedText)}>Show directed graph</Button>
+    <Button onClick={() => openModal()}>Principles</Button>
+  </div>
+</div>
       <div className="px-4 lg:px-8">
         <div>
           <Form {...form}>

@@ -116,7 +116,7 @@ const SummaryPage = () => {
        
     }
     return (
-        <div className='flex flex-col justify-center '>
+        <div className='flex flex-col justify-center bg-white'>
             <div className=' bg-white rounded px-8 pt-6 pb-8 mb-4'>
                 <h1 className='text-center text-xl'>Summary</h1>
                 <h2>Selcte template for summarization</h2>
@@ -133,7 +133,7 @@ const SummaryPage = () => {
                 {!isLoading && summarisedText !== "" && <Button  onClick={() => openModal()}>Principles</Button>}
                 </div>
                 {!isLoading && 
-                <div>
+                <div className='mt-2'>
                     <CaseStyle text={summarisedText}></CaseStyle>
                 </div>
                 }
